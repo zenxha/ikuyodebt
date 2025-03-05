@@ -73,7 +73,7 @@ client.on("interactionCreate", async (interaction) => {
     try {
       await require("axios").post(process.env.TRANSACTION_HOOK, { payer, payee, amount, details });
       console.log('a');
-      await interaction.reply(`✅ Transaction recorded: **${payer} owes ${payee} $${amount}** ${detailsPrint}`);
+      await interaction.reply(`✅ Transaction recorded: **${payer} paid ${payee} $${amount}** ${detailsPrint}`);
     } catch (error) {
       console.error(error);
       await interaction.reply("❌ Failed to record transaction.");
