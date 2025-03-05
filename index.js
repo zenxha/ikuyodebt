@@ -12,7 +12,7 @@ const commands = [
     .setDescription("Record a transaction")
     .addStringOption(option =>
       option.setName("payer")
-        .setDescription("Who owes?")
+        .setDescription("Who paid for the thing?")
         .setRequired(true)
         .addChoices(
           { name: 'AnPhu', value: 'AnPhu' },
@@ -23,7 +23,7 @@ const commands = [
         ))
     .addStringOption(option =>
       option.setName("payee")
-        .setDescription("Who paid?")
+        .setDescription("Who got paid for?")
         .setRequired(true)
         .addChoices(
           { name: 'AnPhu', value: 'AnPhu' },
@@ -92,7 +92,7 @@ client.on("interactionCreate", async (interaction) => {
       .setThumbnail("https://i.pinimg.com/736x/0a/88/34/0a8834c41478a60c20365515803d4e14.jpg") // Replace with your thumbnail URL
       .setColor(0x00AE86)
       .setDescription(balances.map(entry => `**${entry.name}**: $${entry.balance.toFixed(2)}`).join("\n\n"))
-      .setFooter({ text: `👀` });
+      .setFooter({ text: `👀 bruh idk what to put here` });
 
     await interaction.reply({ embeds: [embed] });
     } catch (error) {
