@@ -12,7 +12,7 @@ const commands = [
     .setDescription("Record a transaction")
     .addStringOption(option =>
       option.setName("payer")
-        .setDescription("Who paid for the thing?")
+        .setDescription("Who paid?")
         .setRequired(true)
         .addChoices(
           { name: 'AnPhu', value: 'AnPhu' },
@@ -23,7 +23,7 @@ const commands = [
         ))
     .addStringOption(option =>
       option.setName("payee")
-        .setDescription("Who got paid for?")
+        .setDescription("Who received payment?")
         .setRequired(true)
         .addChoices(
           { name: 'AnPhu', value: 'AnPhu' },
@@ -59,6 +59,27 @@ const whitelist = ['171101210030505987', '303901005710360576', '4428370634321428
 client.on("interactionCreate", async (interaction) => {
   if (!interaction.isCommand()) return;
 
+  if (interaction.commandName === "balances") {
+    try {
+      const response = await require("axios").get(process.env.BALANCE_HOOK); // Web App URL
+      const balances = response.data;
+      console.log(balances);
+
+
+    const embed = new EmbedBuilder()
+      .setTitle("💰 Current Balances")
+      .setThumbnail("https://i.pinimg.com/736x/0a/88/34/0a8834c41478a60c20365515803d4e14.jpg") // Replace with your thumbnail URL
+      .setColor(0x00AE86)
+      .setDescription(balances.map(entry => `**${entry.name}**: $${entry.balance.toFixed(2)}`).join("\n\n"))
+      .setFooter({ text: `👀 bruh idk what to put here` });
+
+    await interaction.reply({ embeds: [embed] });
+    } catch (error) {
+      console.error(error);
+      await interaction.reply("❌ Failed to fetch balances.");
+    }
+  }
+
   if (!whitelist.includes(interaction.user.id)) {
     await interaction.reply("❌ You are not authorized to use this command.");
     return;
@@ -80,26 +101,7 @@ client.on("interactionCreate", async (interaction) => {
     }
   }
 
-  if (interaction.commandName === "balances") {
-    try {
-      const response = await require("axios").get(process.env.BALANCE_HOOK); // Web App URL
-      const balances = response.data;
-      console.log(balances);
-
-
-    const embed = new EmbedBuilder()
-      .setTitle("💰 Current Balances")
-      .setThumbnail("https://i.pinimg.com/736x/0a/88/34/0a8834c41478a60c20365515803d4e14.jpg") // Replace with your thumbnail URL
-      .setColor(0x00AE86)
-      .setDescription(balances.map(entry => `**${entry.name}**: $${entry.balance.toFixed(2)}`).join("\n\n"))
-      .setFooter({ text: `👀 bruh idk what to put here` });
-
-    await interaction.reply({ embeds: [embed] });
-    } catch (error) {
-      console.error(error);
-      await interaction.reply("❌ Failed to fetch balances.");
-    }
-  }
+ 
 });
 
 client.login(process.env.DISCORD_TOKEN);
